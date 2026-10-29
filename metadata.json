@@ -1,0 +1,6 @@
+{
+  "name": "Smart Classroom Availability and Booking System (CSE Department)",
+  "description": "Exclusive CSE Department classroom availability tracking, wing-wise floor plans, instant direct booking, 10-CR access control, and automated class notifications.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

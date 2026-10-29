@@ -1,0 +1,101 @@
+{
+  "entities": {
+    "classroom": {
+      "title": "Classroom",
+      "description": "CSE Department classroom in Left or Right Wing with capacity and projector specifications",
+      "type": "object",
+      "properties": {
+        "roomNumber": { "type": "string", "maxLength": 30 },
+        "wing": { "type": "string", "enum": ["Left Wing", "Right Wing"] },
+        "floor": { "type": "number" },
+        "capacity": { "type": "number" },
+        "hasProjector": { "type": "boolean" },
+        "status": { "type": "string", "enum": ["available", "occupied", "maintenance"] },
+        "facilities": { "type": "array" },
+        "department": { "type": "string", "enum": ["CSE"] },
+        "verifiedByAdmin": { "type": "boolean" },
+        "lastVerifiedAt": { "type": "string" }
+      },
+      "required": ["roomNumber", "wing", "capacity", "hasProjector", "status", "department"]
+    },
+    "crDetails": {
+      "title": "CRDetails",
+      "description": "Class Representative for one of the 5 official CSE sections",
+      "type": "object",
+      "properties": {
+        "name": { "type": "string" },
+        "section": { "type": "string", "enum": ["Section A", "Section B", "Section C", "Section D", "Section E"] },
+        "email": { "type": "string" },
+        "canBook": { "type": "boolean" },
+        "department": { "type": "string", "enum": ["CSE"] }
+      },
+      "required": ["name", "section", "canBook", "department"]
+    },
+    "facultyDetails": {
+      "title": "FacultyDetails",
+      "description": "CSE Faculty member with subject and assigned section",
+      "type": "object",
+      "properties": {
+        "name": { "type": "string" },
+        "subject": { "type": "string" },
+        "section": { "type": "string" },
+        "email": { "type": "string" },
+        "department": { "type": "string", "enum": ["CSE"] }
+      },
+      "required": ["name", "subject", "section", "department"]
+    },
+    "booking": {
+      "title": "Booking",
+      "description": "Flexible time-range classroom reservation in IST",
+      "type": "object",
+      "properties": {
+        "roomNumber": { "type": "string", "maxLength": 30 },
+        "section": { "type": "string" },
+        "date": { "type": "string", "pattern": "^\\d{4}-\\d{2}-\\d{2}$" },
+        "startTime": { "type": "string", "pattern": "^\\d{2}:\\d{2}$" },
+        "endTime": { "type": "string", "pattern": "^\\d{2}:\\d{2}$" },
+        "bookedBy": { "type": "string", "maxLength": 128 },
+        "personId": { "type": "string", "maxLength": 100 },
+        "personName": { "type": "string", "maxLength": 100 },
+        "bookedByName": { "type": "string", "maxLength": 100 },
+        "role": { "type": "string", "enum": ["admin", "faculty", "cr"] },
+        "status": { "type": "string", "enum": ["Confirmed", "Cancelled"] },
+        "createdAt": { "type": "string" }
+      },
+      "required": ["roomNumber", "section", "date", "startTime", "endTime", "bookedBy", "personId", "personName", "role", "status", "createdAt"]
+    },
+    "adminConfig": {
+      "title": "AdminConfig",
+      "description": "Protected system configuration storing the designated single administrator UID and email",
+      "type": "object",
+      "properties": {
+        "adminUid": { "type": "string" },
+        "adminEmail": { "type": "string" },
+        "department": { "type": "string", "enum": ["CSE"] }
+      },
+      "required": ["adminUid", "adminEmail", "department"]
+    }
+  },
+  "firestore": {
+    "/config/admin": {
+      "schema": { "$ref": "#/entities/adminConfig" },
+      "description": "Protected single Admin configuration document"
+    },
+    "/classrooms/{classroomId}": {
+      "schema": { "$ref": "#/entities/classroom" },
+      "description": "20 CSE Classrooms in Left Wing & Right Wing"
+    },
+    "/crs/{crId}": {
+      "schema": { "$ref": "#/entities/crDetails" },
+      "description": "Exactly 5 CRs representing the 5 CSE sections"
+    },
+    "/faculty/{facultyId}": {
+      "schema": { "$ref": "#/entities/facultyDetails" },
+      "description": "CSE faculty member profiles"
+    },
+    "/bookings/{bookingId}": {
+      "schema": { "$ref": "#/entities/booking" },
+      "description": "Classroom reservations with flexible time range and collision prevention"
+    }
+  }
+}
